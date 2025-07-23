@@ -1,0 +1,393 @@
+{
+	"info": {
+		"_postman_id": "f9ccf160-7408-4624-bd92-942281f3b26e",
+		"name": "API_project_Test_1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24154941",
+		"_collection_link": "https://leo444-8602.postman.co/workspace/PY_Postman~bb0e22f8-a091-43ea-9141-2fe17f44df62/collection/24154941-f9ccf160-7408-4624-bd92-942281f3b26e?action=share&source=collection_link&creator=24154941"
+	},
+	"item": [
+		{
+			"name": "Create_User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let randomId = Math.floor(Math.random() * 10000);\r",
+							"pm.environment.set(\"userId\", randomId);\r",
+							"pm.environment.set(\"username\", `user_${randomId}`);\r",
+							"pm.environment.set(\"email\", `user_${randomId}@example.com`);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => { \r",
+							"    pm.response.to.have.status(200) \r",
+							"    });\r",
+							"\r",
+							"const responseJson = pm.response.json();\r",
+							"pm.test(\"Message should contain Userid\", () =>{\r",
+							"    pm.expect(responseJson.message).to.eql(pm.environment.get(\"userId\").toString());\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{userId}},\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Sahal\",\r\n  \"lastName\": \"MS\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"password123\",\r\n  \"phone\": \"4224661695\",\r\n  \"userStatus\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/user",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_User_by_User_name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const responseJson = pm.response.json();\r",
+							"pm.test(\"Username matches\", () => {\r",
+							"    pm.expect(responseJson.username).to.eql(pm.environment.get(\"username\"));\r",
+							"});\r",
+							"pm.test(\"email matches\", () =>{\r",
+							"    pm.expect(responseJson.email).to.eql(pm.environment.get(\"email\"));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/user/{{username}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Updating_First_name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{userId}},\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Leo\",\r\n  \"lastName\": \"Messi\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"password123\",\r\n  \"phone\": \"1077773728\",\r\n  \"userStatus\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/user/{{username}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verifies_Updated_User_name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.test(\"Updated first name\", () =>{\r",
+							"    pm.expect(responseJson.firstName).to.eql(\"Leo\");\r",
+							"    });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{userId}},\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Leo\",\r\n  \"lastName\": \"Messi\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"password123\",\r\n  \"phone\": \"1077773728\",\r\n  \"userStatus\": 1\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/user/{{username}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User_login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const responseJson = pm.response.json();\r",
+							"pm.test(\"Login success message\", () => {\r",
+							"    pm.expect(responseJson.message).to.include(\"logged in user session\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/user/login?username={{username}}&password=password123",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{username}}"
+						},
+						{
+							"key": "password",
+							"value": "password123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User_Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status code is 200\", () =>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const responseJson = pm.response.json();\r",
+							"pm.test(\"User logged out\", () => {\r",
+							"    pm.expect(responseJson.message).to.include(\"ok\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{userId}},\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Sahal\",\r\n  \"lastName\": \"MS\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"password123\",\r\n  \"phone\": \"4224661695\",\r\n  \"userStatus\": 1\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/user/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const responseJson = pm.response.json();\r",
+							"pm.test(\"Response body has correct username\", function () {\r",
+							"    pm.expect(responseJson.message).to.eql(pm.environment.get(\"username\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{userId}},\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Leo\",\r\n  \"lastName\": \"Messi\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"password123\",\r\n  \"phone\": \"1077773728\",\r\n  \"userStatus\": 1\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/user/{{username}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"const responseJson = pm.response.json();\r",
+							"pm.test(\"User not found after deletion\", () => {\r",
+							"    pm.expect(responseJson.message).to.eql(\"User not found\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/user/{{username}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
